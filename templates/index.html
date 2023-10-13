@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form action="{{ url_for('index') }}" method="post">
+    <select name="code_dept">
+        <option disable select>--部門を選択--</option>
+        {% for dept in record["dept_list"] %}
+            <option value={{ dept["コード"] }}>{{ dept["名称"] }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="btn1" value="submit1">
+    <a>{{ record["dept_name"] }}</a>
+
+    <select name="code_vendor">
+        <option disable select>--社名を選択--</option>
+        {% for vendor in record["vendor_list"] %}
+            <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="btn2" value="submit2">
+    <a>{{ record["vendor_name"] }}</a>
+</form>
+
+{% endblock %}
