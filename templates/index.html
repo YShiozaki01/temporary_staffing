@@ -40,13 +40,11 @@
             <option value={{ human["コード"] }}>{{ human["名称"] }}</option>
         {% endfor %}
     </select>
-    <input type="submit" value="選択">
+    <button type="submit" name="btn" value="s">選択</button>
     {% if not start_flg %}
         <a>{{ record["human_name"] }}</a>
     {% endif %}
-    <form action="{{ url_for('cancel_human') }}" method="post">
-        <button type="submit" name="cansel" value="c">キャンセル</button>
-    </form>
+    <button type="submit" name="btn" value="c">キャンセル</button>
 </form>
 
 {% if start_flg %}

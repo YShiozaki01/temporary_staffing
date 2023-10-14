@@ -3,7 +3,8 @@ import sqlite3
 
 app = Flask(__name__)
 
-DATABASE = "./database/database.db"
+# DATABASE = "./database/database.db"
+DATABASE = r"D:\Programming\temporary_staffing\database\database.db"
 
 global record
 global record2
@@ -118,28 +119,24 @@ def keyword():
 
 @app.route("/select_3", methods=["get", "post"])
 def select_3():
-    record["human_cd"] = request.form.get("code_human")
-    if "human_cd" in record:
-        record["human_name"] = get_display_name("human")
-        human_info = get_human_info(record["human_cd"])
-        record2["info_1"] = human_info["勤務帯"]
-        record2["info_2"] = human_info["業務内容"]
-        record2["info_3"] = human_info["基本単価"]
-    start_flg = True
-    return render_template("index.html", record=record,
-                           record2=record2, start_flg=start_flg)
-
-
-@app.route("/cancel_human", methods=["post"])
-def cancel_human():
-    print("human_cd" in record)
-    if request.form.get("cancel") == "c":
+    if request.form.get("btn") == "s":
+        record["human_cd"] = request.form.get("code_human")
+        if "human_cd" in record:
+            record["human_name"] = get_display_name("human")
+            human_info = get_human_info(record["human_cd"])
+            record2["info_1"] = human_info["勤務帯"]
+            record2["info_2"] = human_info["業務内容"]
+            record2["info_3"] = human_info["基本単価"]
+        start_flg = True
+    elif request.form.get("btn") == "c":
+        print("キャンセルが押されました")
         start_flg = False
         del record["human_cd"]
         print("human_cd" in record)
         record["human_list"] = get_pulldown_list("human")
-        return render_template("index.html", record=record,
-                               start_flg=start_flg)
+        record2.clear()
+    return render_template("index.html", record=record,
+                           record2=record2, start_flg=start_flg)
 
 
 if __name__ == "__main__":
