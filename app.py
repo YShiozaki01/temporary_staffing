@@ -98,6 +98,8 @@ def index():
 
 @app.route("/select_1", methods=["get", "post"])
 def select_1():
+    record["year"] = request.form.get("year")
+    record["month"] = request.form.get("month")
     record["dept_cd"] = request.form.get("code_dept")
     if "dept_cd" in record:
         record["dept_name"] = get_display_name("dept")
@@ -138,6 +140,7 @@ def select_3():
         del record["human_cd"]
         print("human_cd" in record)
         record["human_list"] = get_pulldown_list("human")
+        del record["keyword"]
         record2.clear()
     return render_template("index.html", record=record,
                            record2=record2, start_flg=start_flg)

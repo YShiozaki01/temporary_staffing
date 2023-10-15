@@ -3,12 +3,18 @@
 {% block body %}
 
 <form action="{{ url_for('select_1') }}" method="post">
+    <a><input type="text" name="year" size="6" placeholder="--請求年--"
+        value={% if record["year"] %}{{ record["year"] }}{% endif %}>年</a>
+    <a><input type="text" name="month" size="6" placeholder="--請求月--"
+        value={% if record["month"] %}{{ record["month"] }}{% endif %}>月</a>
+    <p></p>
     <select name="code_dept">
         <option disable select>--部門を選択--</option>
         {% for dept in record["dept_list"] %}
             <option value={{ dept["コード"] }}>{{ dept["名称"] }}</option>
         {% endfor %}
     </select>
+
     <input type="submit" value="選択">
     {% if not start_flg %}
         <a>{{ record["dept_name"] }}</a>
@@ -29,7 +35,8 @@
 </form>
 
 <form action="{{ url_for('keyword') }}" method="post">
-    <input type="text" name="keywd">
+    <input type="text" name="keywd" placeholder="--絞り込みキーワード--"
+    value={% if record["keyword"] %}{{ record["keyword"] }}{% endif %}>
     <input type="submit" value="絞込">
 </form>
 
