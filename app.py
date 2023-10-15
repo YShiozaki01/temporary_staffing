@@ -139,7 +139,8 @@ def select_3():
         start_flg = False
         del record["human_cd"]
         record["human_list"] = get_pulldown_list("human")
-        del record["keyword"]
+        if "keyword" in record:
+            del record["keyword"]
         record2.clear()
     elif request.form.get("btn") == "r":
         start_flg = False

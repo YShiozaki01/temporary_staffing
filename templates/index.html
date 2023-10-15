@@ -14,7 +14,6 @@
             <option value={{ dept["コード"] }}>{{ dept["名称"] }}</option>
         {% endfor %}
     </select>
-
     <input type="submit" value="選択">
     {% if not start_flg %}
         <a>{{ record["dept_name"] }}</a>
@@ -52,18 +51,26 @@
         <a>{{ record["human_name"] }}</a>
     {% endif %}
     {% if start_flg %}
-        <p>部門: {{ record["dept_name"] }}</p>
-        <p>社名: {{ record["vendor_name"] }}</p>
-        <p>氏名: {{ record["human_name"] }}</p>
-        <p>勤務帯: {{ record2["info_1"] }}</p>
-        <p>業務内容: {{ record2["info_2"] }}</p>
-        <p>基本単価: {{ record2["info_3"] }}</p>
-
-        <p>作業時間: <input type="text" name="working_hours"></p>
-        <p>その他: <input type="text" name="others"></p>
+        <table border="0">
+            <tr><td>部門：</td><td>　</td><td>{{ record["dept_name"] }}</td></tr>
+            <tr><td>社名：</td><td>　</td><td>{{ record["vendor_name"] }}</td></tr>
+            <tr><td>氏名：</td><td>　</td><td>{{ record["human_name"] }}</td></tr>
+            <tr><td>勤務帯：</td><td>　</td><td>{{ record2["info_1"] }}</td></tr>
+            <tr><td>業務内容：</td><td>　</td><td>{{ record2["info_2"] }}</td></tr>
+            <tr><td>基本単価：</td><td>　</td><td>{{ record2["info_3"] }}</td></tr>
+        
+            <tr><td>作業時間：</td><td>　</td><td><input type="text" name="working_hours"></td></tr>
+            <tr><td>その他：</td><td>　</td><td><input type="text" name="others"></td></tr>
+        </table>
     {% endif %}
-    <a><button type="submit" name="btn" value="c">キャンセル</button></a>
-    <a><button type="submit" name="btn" value="r">登録</button></a>
+    <p>
+        <table>
+            <tr><button type="submit" name="btn" value="c">キャンセル</button></tr>
+            <tr>　　</tr>
+            <tr><button type="submit" name="btn" value="r">登録</button></tr>
+        </table>
+    </p>
+    
 </form>
 
 {% endblock %}
