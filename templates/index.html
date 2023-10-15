@@ -37,7 +37,7 @@
     <select name="code_human">
         <option disable select>--氏名を選択--</option>
         {% for human in record["human_list"] %}
-            <option value={{ human["コード"] }}>{{ human["名称"] }}</option>
+            <option value={{ human["コード"] }}>{{ human["人材"] }}</option>
         {% endfor %}
     </select>
     <button type="submit" name="btn" value="s">選択</button>

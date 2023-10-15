@@ -30,11 +30,15 @@ def get_pulldown_list(name):
         SELECT コード, 名称 FROM MVendor WHERE 部門 = '{dept_cd}';
         """
     sql_human = f"""
-        SELECT コード, 名称 FROM MHuman_resources
+        SELECT コード, 名称 || ' 【' || 業務内容 || ' ' || 基本単価 || '】'
+        as 人材
+        FROM MHuman_resources
         WHERE 業者コード = {vendor_cd};
         """
     sql_human_2 = f"""
-        SELECT コード, 名称 FROM MHuman_resources
+        SELECT コード, 名称 || ' 【' || 業務内容 || ' ' || 基本単価 || '】'
+        as 人材
+        FROM MHuman_resources
         WHERE 業者コード = {vendor_cd} AND 名称 like '%{keyword}%';
         """
     if name == "dept":
