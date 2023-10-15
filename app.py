@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from register import DataRegistration
 
 app = Flask(__name__)
 
 # DATABASE = "./database/database.db"
-DATABASE = r"D:\Programming\temporary_staffing\database\database.db"
+DATABASE = "./database/database.db"
 
 global record
 global record2
@@ -135,13 +136,17 @@ def select_3():
             record2["info_3"] = human_info["基本単価"]
         start_flg = True
     elif request.form.get("btn") == "c":
-        print("キャンセルが押されました")
         start_flg = False
         del record["human_cd"]
-        print("human_cd" in record)
         record["human_list"] = get_pulldown_list("human")
         del record["keyword"]
         record2.clear()
+    elif request.form.get("btn") == "r":
+        start_flg = False
+        record["working_hours"] = request.form.get("working_hours")
+        record["others"] = request.form.get("others")
+        dr = DataRegistration(record)
+        dr.regist_data()
     return render_template("index.html", record=record,
                            record2=record2, start_flg=start_flg)
 

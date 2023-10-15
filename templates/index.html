@@ -51,16 +51,19 @@
     {% if not start_flg %}
         <a>{{ record["human_name"] }}</a>
     {% endif %}
-    <button type="submit" name="btn" value="c">キャンセル</button>
-</form>
+    {% if start_flg %}
+        <p>部門: {{ record["dept_name"] }}</p>
+        <p>社名: {{ record["vendor_name"] }}</p>
+        <p>氏名: {{ record["human_name"] }}</p>
+        <p>勤務帯: {{ record2["info_1"] }}</p>
+        <p>業務内容: {{ record2["info_2"] }}</p>
+        <p>基本単価: {{ record2["info_3"] }}</p>
 
-{% if start_flg %}
-    <h4>部門: {{ record["dept_name"] }}</h4>
-    <h4>社名: {{ record["vendor_name"] }}</h4>
-    <h4>氏名: {{ record["human_name"] }}</h4>
-    <h4>勤務帯: {{ record2["info_1"] }}</h4>
-    <h4>業務内容: {{ record2["info_2"] }}</h4>
-    <h4>基本単価: {{ record2["info_3"] }}</h4>
-{% endif %}
+        <p>作業時間: <input type="text" name="working_hours"></p>
+        <p>その他: <input type="text" name="others"></p>
+    {% endif %}
+    <a><button type="submit" name="btn" value="c">キャンセル</button></a>
+    <a><button type="submit" name="btn" value="r">登録</button></a>
+</form>
 
 {% endblock %}
