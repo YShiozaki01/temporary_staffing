@@ -9,7 +9,7 @@
         value={% if record["month"] %}{{ record["month"] }}{% endif %}>月</a>
     <p></p>
     <select name="code_dept">
-        <option disable select>--部門を選択--</option>
+        <option disabled selected>--部門を選択--</option>
         {% for dept in record["dept_list"] %}
             <option value={{ dept["コード"] }}>{{ dept["名称"] }}</option>
         {% endfor %}
@@ -22,7 +22,7 @@
 
 <form action="{{ url_for('select_2') }}" method="post">
     <select name="code_vendor">
-        <option disable select>--社名を選択--</option>
+        <option disabled selected>--社名を選択--</option>
         {% for vendor in record["vendor_list"] %}
             <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
         {% endfor %}
@@ -41,7 +41,7 @@
 
 <form action="{{ url_for('select_3') }}" method="post">
     <select name="code_human">
-        <option disable select>--氏名を選択--</option>
+        <option disabled selected>--氏名を選択--</option>
         {% for human in record["human_list"] %}
             <option value={{ human["コード"] }}>{{ human["人材"] }}</option>
         {% endfor %}

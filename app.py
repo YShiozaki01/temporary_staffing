@@ -102,7 +102,9 @@ def select_1():
     record["year"] = request.form.get("year")
     record["month"] = request.form.get("month")
     record["dept_cd"] = request.form.get("code_dept")
-    if "dept_cd" in record:
+    print(request.form.get("code_dept"))
+    # if "dept_cd" in record:
+    if not record["dept_cd"] is None:
         record["dept_name"] = get_display_name("dept")
         record["vendor_list"] = get_pulldown_list("vendor")
     return render_template("index.html", record=record)
