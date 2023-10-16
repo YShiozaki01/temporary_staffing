@@ -126,6 +126,7 @@ def keyword():
 
 @app.route("/select_3", methods=["get", "post"])
 def select_3():
+    input_result = ""
     if request.form.get("btn") == "s":
         record["human_cd"] = request.form.get("code_human")
         if "human_cd" in record:
@@ -146,10 +147,13 @@ def select_3():
         start_flg = False
         record["working_hours"] = request.form.get("working_hours")
         record["others"] = request.form.get("others")
+        record["remarks"] = request.form.get("remarks")
         dr = DataRegistration(record)
         dr.regist_data()
+        input_result = dr.input_result()
     return render_template("index.html", record=record,
-                           record2=record2, start_flg=start_flg)
+                           record2=record2, start_flg=start_flg,
+                           input_result=input_result)
 
 
 if __name__ == "__main__":

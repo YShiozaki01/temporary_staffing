@@ -61,6 +61,7 @@
         
             <tr><td>作業時間：</td><td>　</td><td><input type="text" name="working_hours"></td></tr>
             <tr><td>その他：</td><td>　</td><td><input type="text" name="others"></td></tr>
+            <tr><td>備考：</td><td>　</td><td><textarea name="remarks" rows="3"></textarea></td></tr>
         </table>
     {% endif %}
     <p>
@@ -72,5 +73,28 @@
     </p>
     
 </form>
+
+{% if input_result %}
+    <table>
+        <tr>
+            <th>部門名</th>
+            <th>会社名</th>
+            <th>氏名</th>
+            <th>作業時間</th>
+            <th>その他</th>
+            <th>備考</th>
+        </tr>
+        {% for row in input_result %}
+            <tr>
+                <td>{{ row["部門名"] }}</td>
+                <td>{{ row["会社名"] }}</td>
+                <td>{{ row["氏名"] }}</td>
+                <td>{{ row["作業時間"] }}</td>
+                <td>{{ row["その他"] }}</td>
+                <td>{{ row["備考"] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
 
 {% endblock %}
