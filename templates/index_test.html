@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <p>Please enter something...</p>
+        <input type="text" id="mytextbox" onchange="myfunc()">
+     
+        <script>
+
+            function myfunc() {
+                const textbox = document.getElementById("mytextbox");
+                const myname = textbox.value;
+                
+                const form = document.createElement("form");
+                const request = document.createElement("input");
+
+                form.method = "POST";
+                form.action = "/greet"
+
+                request.type = "hidden";
+                request.name = "name";
+                request.value = myname
+
+                form.append(request);
+                document.body.append(form);
+
+                form.submit();
+            }
+        </script>
+    </body>
+</html>
