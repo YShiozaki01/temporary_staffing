@@ -26,7 +26,7 @@ def get_department_list():
 
 # 業者のリストを作成
 def get_vendor_list(department_code):
-    sql = f"SELECT * FROM MVendor WHERE 部門 = '{department_code}';"
+    sql = f"SELECT コード, 名称 FROM MVendor WHERE 部門 = '{department_code}';"
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql)
@@ -39,17 +39,14 @@ def index():
     send_dict["department_list"] = get_department_list()
     return render_template("index.html", send_dict = send_dict)
 
-@app.route("/vendor_list_gen", methods=["POST"])
-def vendor_list_gen():
-    department_code = request.form.get("department")
-    send_dict["vendor_list"] = get_vendor_list(department_code)
-    # for vendor in vendor_list:
-    #     print(list(vendor))
+@app.route("/register", methods=["POST"])
+def register():
+    send_dict["closing_date_year"] = request.form.get("year")
+    send_dict["closing_date_month"] = request.form.get("month")
+    send_dict["department_code"] = request.form.get("department")
+    send_dict["vendor_list"] = get_vendor_list(send_dict["department_code"])
+    print(send_dict)
     return redirect(url_for("index"))
-
-@app.route("/regist", methods=["POST"])
-def regist():
-    return "Under construction"
 
 if __name__ == "__main__":
     app.debug = True

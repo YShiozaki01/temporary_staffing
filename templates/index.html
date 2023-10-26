@@ -1,46 +1,47 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form action="{{ url_for('regist') }}" method="post">
-    <input type="text" name="year" size="6" placeholder="--請求年--">年
-    <input type="text" name="month" size="6" placeholder="--請求月--">月
-    <p>
-        <select name="department" class="select1">
-            {% for department in send_dict["department_list"] %}
-            <option value={{ department["コード"] }}>{{ department["名称"] }}</option>
-            {% endfor %}
-        </select>
-        <script>
-            const select1 = document.querySelector(".select1");
-            select1.addEventListener("input", function (event) {
-                const value = event.currentTarget.value;
-                // JavaScriptから直接送信
-                const form = document.createElement("form");
-                const request = document.createElement("input");
 
-                form.method = "POST";
-                form.action = "/vendor_list_gen"
-
-                request.type = "hidden";
-                request.name = "department";
-                request.value = value
-
-                form.append(request);
-                document.body.append(form);
-
-                form.submit();
-            });
-        </script>
-    </p>
-    <p>
-        <select name="vendor" class="select1">
-            {% if "vendor_list" in send_dict %}
-                {% for vendor in send_dict["vendor_list"] %}
-                    <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
+    <form action="/register" id="form" method="post">
+        <input type="text" name="year" size="6" placeholder="--請求年--">年
+        <input type="text" name="month" size="6" placeholder="--請求月--">月
+        <p>
+            <select name="department" class="select1">
+                {% for department in send_dict["department_list"] %}
+                <option value={{ department["コード"] }}>{{ department["名称"] }}</option>
                 {% endfor %}
-            {% endif %}
-        </select>
-    </p>
-</form>
+            </select>
+        </p>
+        <p>
+            <select name="vendor" class="select2">
+                {% for vendor in send_dict["vendor_list"] %}
+                <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <button id="button" type="button">送信</button>
+    </form>
+  
+    <script>
+        const form = document.querySelector("#form")
+        // const submitButton = document.querySelector("#button")
+        const select1 = document.querySelector(".select1")
+
+        // submitButton.onclick = function () {
+        select1.onchange = function () {
+            const formData = new FormData(form)
+            const action = form.getAttribute("action")
+            const options = {
+                method: 'POST',
+                body: formData,
+            }
+
+            fetch(action, options).then(function (e) {
+                  return
+                }
+            )
+        }
+
+      </script>
         
 {% endblock %}

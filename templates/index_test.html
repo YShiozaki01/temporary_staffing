@@ -4,30 +4,33 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <p>Please enter something...</p>
-        <input type="text" id="mytextbox" onchange="myfunc()">
-     
+        <form id="form" action="/greet" method="post">
+            <input type="text" name="name" />
+            <button id="submit-button" type="button">送信</button>
+        </form>
+      
         <script>
+            const form = document.querySelector("#form")
+            const submitButton = document.querySelector("#submit-button")
 
-            function myfunc() {
-                const textbox = document.getElementById("mytextbox");
-                const myname = textbox.value;
-                
-                const form = document.createElement("form");
-                const request = document.createElement("input");
+            submitButton.onclick = function () {
+                const formData = new FormData(form)
+                const action = form.getAttribute("action")
+                const options = {
+                    method: 'POST',
+                    body: formData,
+                }
 
-                form.method = "POST";
-                form.action = "/greet"
-
-                request.type = "hidden";
-                request.name = "name";
-                request.value = myname
-
-                form.append(request);
-                document.body.append(form);
-
-                form.submit();
+                fetch(action, options).then(function (e) {
+                    // if(e.status === 200) {
+                    //   alert("保存しました。")
+                      return
+                    }
+                    // alert("保存できませんでした。")
+                // })
+                )
             }
-        </script>
+
+          </script>
     </body>
 </html>
