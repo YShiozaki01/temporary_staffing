@@ -2,32 +2,68 @@
 
 {% block body %}
 
-    <form action="/register" id="form" method="post">
-        <input type="text" name="year" size="6" placeholder="--請求年--">年
-        <input type="text" name="month" size="6" placeholder="--請求月--">月
+    <form action="/register" method="post">
         <p>
-            <select name="department" class="select1">
+            <label>請求年月</label>            
+            <input type="text" name="year" size="5" placeholder="--請求年--"
+            value={% if "closing_date_year" in send_dict %}{{ send_dict["closing_date_year"] }}{% endif %}>年
+            <input type="text" name="month" size="5" placeholder="--請求月--"
+            value={% if "closing_date_month" in send_dict %}{{ send_dict["closing_date_month"] }}{% endif %}>月
+        </p>
+        <p>
+            <label>部門</label>
+            <select name="department" class="select1" onchange="this.form.submit();">
+                <option value=None disabled selected>
+                    {% if "department_name" in send_dict %}{{ send_dict["department_name"] }}{% else %}{{ "--選択--" }}{% endif %}
+                </option>
                 {% for department in send_dict["department_list"] %}
                 <option value={{ department["コード"] }}>{{ department["名称"] }}</option>
                 {% endfor %}
             </select>
         </p>
         <p>
-            <select name="vendor" class="select2">
+            <label>業者</label>
+            <select name="vendor" class="select2" onchange="this.form.submit();">
+                <option value=None disabled selected>
+                    {% if "vendor_name" in send_dict %}{{ send_dict["vendor_name"] }}{% else %}{{ "--選択--" }}{% endif %}
+                </option>
                 {% for vendor in send_dict["vendor_list"] %}
-                <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
+                    <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
                 {% endfor %}
             </select>
         </p>
-        <button id="button" type="button">送信</button>
+        <p>
+            <label>人材</label>
+            <select name="resource" class="select3">
+                <option value=None disabled selected>
+                    {% if "resource_name" in send_dict %}{{ send_dict["resource_name"] }}{% else %}{{ "--選択--" }}{% endif %}
+                </option>
+                {% for resource in send_dict["resource_list"] %}
+                    <option value={{ resource["コード"] }}>{{ resource["人材情報"] }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label>作業時間</label>            
+            <input type="text" name="working_hours" size="5"
+            value={% if "working_hours" in send_dict %}{{ send_dict["working_hours"] }}{% endif %}>
+        </p>
+        <p>
+            <label>その他</label>            
+            <input type="text" name="others" size="10"
+            value={% if "others" in send_dict %}{{ send_dict["others"] }}{% endif %}>
+        </p>
+        <p>
+            <label>備考</label>            
+            <textarea name="remarks" rows="3" cols="20"></textarea>
+        </p>
+        <input type="submit" />
     </form>
   
-    <script>
+    <!-- <script>
         const form = document.querySelector("#form")
-        // const submitButton = document.querySelector("#button")
         const select1 = document.querySelector(".select1")
 
-        // submitButton.onclick = function () {
         select1.onchange = function () {
             const formData = new FormData(form)
             const action = form.getAttribute("action")
@@ -37,11 +73,14 @@
             }
 
             fetch(action, options).then(function (e) {
-                  return
+                  return;
                 }
             )
         }
-
-      </script>
+        // const pulldown2 = document.querySelectot(".select2");
+        // pulldown2.addEventlistener("onchange", function () {
+        //     window.location.reload();
+        // });
+      </script> -->
         
 {% endblock %}
