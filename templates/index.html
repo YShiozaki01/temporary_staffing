@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <form action="/register" method="post">
+    <form action="/register" id="form1" method="post">
         <p>
             <label>請求年月</label>            
             <input type="text" id="year" name="year" size="5" placeholder="--請求年--"
@@ -42,6 +42,8 @@
                     <option value={{ resource["コード"] }}>{{ resource["人材情報"] }}</option>
                 {% endfor %}
             </select>
+            <!-- <input type="text" name="keyword" size="5" id="keyword"
+            value={% if "keyword" in send_dict %}{{ send_dict["keyword"] }}{% endif %}> -->
         </p>
         <p>
             <label>作業時間</label>            
@@ -59,8 +61,8 @@
         </p>
         <button type="submit" name="button" value="entry">登録</button>
     </form>
-    
-    <table>
+    <p></p>
+    <table class="design04">
         <thead>
             <tr>
                 <th>部門</th>
@@ -84,19 +86,6 @@
             {% endfor %}
         </tbody>
     </table>
-    <!-- <script>
-        const send_json ={}
-        const select1 = document.querySelector(".select1");
-        select1.addEventListener("input", function (event) {
-            const value = event.currentTarget.value;
-            console.log(`${value}が選択された`);
-        });
+    <script src="motion.js"></script>
 
-        const button = document.querySelector("#register")
-        button.addEventListener("click", function () {
-            location.href = "/entry";
-        });
-
-    </script>         -->
-        
 {% endblock %}

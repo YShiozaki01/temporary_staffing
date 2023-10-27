@@ -3,3 +3,29 @@ label {
     float: left;
     width: 100px;
 }
+
+.design04 {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+   }
+   .design04 tr:nth-child(2n+1) {
+    background: #e9faf9;
+   }
+   .design04 th {
+    padding: 10px;
+    background: #778ca3;
+    border-right: solid 1px #778ca3;
+    color: #ffffff;
+   }
+   .design04 th:last-child {
+    border-right: none;
+   }
+   .design04 td {
+    padding: 10px;
+    border-right: solid 1px #778ca3; 
+   }
+   .design04 td:last-child {
+    border-right: none;
+   }

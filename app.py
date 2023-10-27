@@ -36,8 +36,15 @@ def get_vendor_list(department_code):
 
 # 人材のリストを作成
 def get_resource_list(vendor_code):
-    sql = f"""SELECT コード, 名称 || '　(' || 勤務帯 || ' ' || 業務内容 || ' @' || 基本単価 || ')' as 人材情報
-        FROM MHuman_resources WHERE 業者コード = {vendor_code} and 削除 is NULL ORDER BY 名称;"""
+    # sql = f"""
+    #     SELECT コード, 名称 || '　(' || 勤務帯 || ' ' || 業務内容 || ' @' || 基本単価 || ')' as 人材情報
+    #     FROM MHuman_resources WHERE 業者コード = {vendor_code} AND 名称 like '%{keyword}%' AND 削除 is NULL
+    #     ORDER BY 名称;
+    #     """
+    sql = f"""
+        SELECT コード, 名称 || '　(' || 勤務帯 || ' ' || 業務内容 || ' @' || 基本単価 || ')' as 人材情報
+        FROM MHuman_resources WHERE 業者コード = {vendor_code} AND 削除 is NULL ORDER BY 名称;
+        """
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql)
@@ -132,9 +139,11 @@ def regist_data():
         send_dict["department_code"] = request.form.get("department")
         send_dict["department_name"] = get_department_name(send_dict["department_code"])
         send_dict["vendor_list"] = get_vendor_list(send_dict["department_code"])
+    # send_dict["keyword"] = "%" if request.form.get("keyword") == "" else request.form.get("keyword")
     if not request.form.get("vendor") == "":
         send_dict["vendor_code"] = request.form.get("vendor")
         send_dict["vendor_name"] = get_vendor_name(send_dict["vendor_code"])
+        # send_dict["resource_list"] = get_resource_list(send_dict["vendor_code"], send_dict["keyword"])
         send_dict["resource_list"] = get_resource_list(send_dict["vendor_code"])
     if not request.form.get("resource") == "":
         send_dict["resource_code"] = request.form.get("resource")
