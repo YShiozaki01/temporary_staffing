@@ -38,7 +38,6 @@ def get_vendor_list(department_code):
 def get_resource_list(vendor_code):
     sql = f"""SELECT コード, 名称 || '　(' || 勤務帯 || ' ' || 業務内容 || ' @' || 基本単価 || ')' as 人材情報
         FROM MHuman_resources WHERE 業者コード = {vendor_code} and 削除 is NULL ORDER BY 名称;"""
-    print(sql)
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql)
@@ -60,7 +59,6 @@ def get_department_name(department_code):
 # 業者名称を取得
 def get_vendor_name(vendor_code):
     sql = f"SELECT 名称 FROM MVendor WHERE コード = {vendor_code};"
-    print(sql)
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql)
@@ -158,7 +156,6 @@ def input_history_gen():
         AND a.請求月 = {send_dict['closing_date_month']}
         ORDER by a.ID DESC;
         """
-    print(sql)
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(sql)
@@ -174,7 +171,6 @@ def index():
 @app.route("/register", methods=["POST"])
 def register():
     regist_data()
-    print(send_dict)
     if request.form.get("button") == "entry":
         insert_list = []
         insert_list.append(send_dict["closing_date_year"])
@@ -189,7 +185,6 @@ def register():
         for element in ["resource_code", "resource_name", "working_hours", "others", "remarks"]:
             del send_dict[element]
         input_history_gen()
-        print(send_dict["input_history"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
