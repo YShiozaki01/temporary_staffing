@@ -83,14 +83,47 @@ def get_resource_name(resource_code):
 
 # 入力をTTemporary_staffingに書き込み
 def insert_table(data_list):
+    # 1)登録済みかチェック
     sql = f"""
-        INSERT INTO TTemporary_Staffing(請求年, 請求月, 部門, 会社, 人材, 作業時間, その他, 備考)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+        SELECT * FROM TTemporary_staffing 
+        WHERE 請求年 = {send_dict['closing_date_year']}
+        AND 請求月 = {send_dict['closing_date_month']}
+        AND 部門 = '{send_dict['department_code']}'
+        AND 会社 = {send_dict['vendor_code']}
+        AND 人材 = {send_dict['resource_code']};
         """
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
-    cur.execute(sql, data_list)
-    conn.commit()
+    cur.execute(sql)
+    # 2)もし、同じ内容が登録済みなら更新
+    if len(cur.fetchall()) > 0:
+        sql = f"""
+            SELECT ID FROM TTemporary_staffing 
+            WHERE 請求年 = {send_dict['closing_date_year']}
+            AND 請求月 = {send_dict['closing_date_month']}
+            AND 部門 = '{send_dict['department_code']}'
+            AND 会社 = {send_dict['vendor_code']}
+            AND 人材 = {send_dict['resource_code']};
+            """
+        cur.execute(sql)
+        result = cur.fetchone()
+        id = result[0]
+        sql = f"""
+            UPDATE TTemporary_staffing
+            SET 請求年 = {data_list[0]}, 請求月 = {data_list[1]}, 部門 = '{data_list[2]}',
+            会社 = {data_list[3]}, 人材 = {data_list[4]}, 作業時間 = {data_list[5]},
+            その他 = '{data_list[6]}', 備考 = '{data_list[7]}' WHERE ID = {id};
+            """
+        cur.execute(sql)
+        conn.commit()
+    # 3)もし、同じ内容の登録がなければ追加
+    else:
+        sql = f"""
+            INSERT INTO TTemporary_Staffing(請求年, 請求月, 部門, 会社, 人材, 作業時間, その他, 備考)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+            """
+        cur.execute(sql, data_list)
+        conn.commit()
 
 
 # 入力データを変数に順次代入
