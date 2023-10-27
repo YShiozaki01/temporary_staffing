@@ -81,6 +81,58 @@ def get_resource_name(resource_code):
     return name
 
 
+# 入力をTTemporary_staffingに書き込み
+def insert_table(data_list):
+    sql = f"""
+        INSERT INTO TTemporary_Staffing(請求年, 請求月, 部門, 会社, 人材, 作業時間, その他, 備考)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+        """
+    conn = sqlite3.connect(DATABASE)
+    cur = conn.cursor()
+    cur.execute(sql, data_list)
+    conn.commit()
+
+
+# 入力データを変数に順次代入
+def regist_data():
+    send_dict["closing_date_year"] = request.form.get("year")
+    send_dict["closing_date_month"] = request.form.get("month")
+    if not request.form.get("department") == "":
+        send_dict["department_code"] = request.form.get("department")
+        send_dict["department_name"] = get_department_name(send_dict["department_code"])
+        send_dict["vendor_list"] = get_vendor_list(send_dict["department_code"])
+    if not request.form.get("vendor") == "":
+        send_dict["vendor_code"] = request.form.get("vendor")
+        send_dict["vendor_name"] = get_vendor_name(send_dict["vendor_code"])
+        send_dict["resource_list"] = get_resource_list(send_dict["vendor_code"])
+    if not request.form.get("resource") == "":
+        send_dict["resource_code"] = request.form.get("resource")
+        send_dict["resource_name"] = get_resource_name(send_dict["resource_code"])
+    send_dict["working_hours"] = request.form.get("working_hours")
+    send_dict["others"] = request.form.get("others")
+    send_dict["remarks"] = request.form.get("remarks")
+
+
+# 入力履歴データを生成
+def input_history_gen():
+    sql = f"""
+        SELECT b.名称 as 部門, c.名称 as 会社名, d.名称 as 氏名, a.作業時間, a.その他, a.備考
+        FROM TTemporary_staffing as a
+        LEFT JOIN MDepartment as b on a.部門 = b.コード
+        LEFT JOIN MVendor as c on a.会社 = c.コード
+        LEFT JOIN MHuman_resources as d on a.人材 = d.コード
+        WHERE a.請求年 = {send_dict['closing_date_year']}
+        AND a.請求月 = {send_dict['closing_date_month']}
+        ORDER by a.ID DESC;
+        """
+    print(sql)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(sql)
+    result = cur.fetchall()
+    send_dict["input_history"] = result
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     send_dict["department_list"] = get_department_list()
@@ -88,23 +140,23 @@ def index():
 
 @app.route("/register", methods=["POST"])
 def register():
-    send_dict["closing_date_year"] = request.form.get("year")
-    send_dict["closing_date_month"] = request.form.get("month")
-    send_dict["department_code"] = request.form.get("department")
-    if not send_dict["department_code"] is None:
-        send_dict["department_name"] = get_department_name(send_dict["department_code"])
-        send_dict["vendor_list"] = get_vendor_list(send_dict["department_code"])
-    send_dict["vendor_code"] = request.form.get("vendor")
-    if not send_dict["vendor_code"] is None:
-        send_dict["vendor_name"] = get_vendor_name(send_dict["vendor_code"])
-        send_dict["resource_list"] = get_resource_list(send_dict["vendor_code"])
-    send_dict["resource_code"] = request.form.get("resource")
-    if not send_dict["resource_code"] is None:
-        send_dict["resource_name"] = get_resource_name(send_dict["resource_code"])
-    send_dict["working_hours"] = request.form.get("working_hours")
-    send_dict["others"] = request.form.get("others")
-    send_dict["remarks"] = request.form.get("remarks")
+    regist_data()
     print(send_dict)
+    if request.form.get("button") == "entry":
+        insert_list = []
+        insert_list.append(send_dict["closing_date_year"])
+        insert_list.append(send_dict["closing_date_month"])
+        insert_list.append(send_dict["department_code"])
+        insert_list.append(send_dict["vendor_code"])
+        insert_list.append(send_dict["resource_code"])
+        insert_list.append(send_dict["working_hours"])
+        insert_list.append(send_dict["others"])
+        insert_list.append(send_dict["remarks"])
+        insert_table(insert_list)
+        for element in ["resource_code", "resource_name", "working_hours", "others", "remarks"]:
+            del send_dict[element]
+        input_history_gen()
+        print(send_dict["input_history"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
