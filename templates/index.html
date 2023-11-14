@@ -1,67 +1,57 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人材派遣費単価登録</title>
+    <link rel="stylesheet" href="../static/style.css" type="text/css">
+</head>
+<body>
+        <header>
+            <h2>人材派遣費単価登録</h2>
+        </header>
 
-{% block body %}
-
-    <form action="/register" id="form1" method="post">
+		<form action="/regist" method="post" autocomplete="off" name="form01">
         <p>
-            <label>請求年月</label>            
-            <input type="text" id="year" name="year" size="5" placeholder="--請求年--"
-            value={% if "closing_date_year" in send_dict %}{{ send_dict["closing_date_year"] }}{% endif %}>年
-            <input type="text" name="month" size="5" placeholder="--請求月--"
-            value={% if "closing_date_month" in send_dict %}{{ send_dict["closing_date_month"] }}{% endif %}>月
+            <label>請求年月</label>
+            <input type="text" name="year" class="input_s">年
+            <input type="text" name="month" class="input_s">月
         </p>
         <p>
             <label>部門</label>
-            <select name="department" class="select1" onchange="this.form.submit();">
-                <option value="">
-                    {% if "department_name" in send_dict %}{{ send_dict["department_name"] }}{% else %}{{ "--選択--" }}{% endif %}
-                </option>
-                {% for department in send_dict["department_list"] %}
-                <option value={{ department["コード"] }}>{{ department["名称"] }}</option>
+            <select id="select_dept" name="select_dept">
+                <option value="">--選択--</option>
+                {% for department in departmentList %}
+                    <option value="{{ department["コード"] }}">{{ department["名称"] }}</option>
                 {% endfor %}
             </select>
         </p>
         <p>
             <label>業者</label>
-            <select name="vendor" class="select2" onchange="this.form.submit();">
-                <option value="">
-                    {% if "vendor_name" in send_dict %}{{ send_dict["vendor_name"] }}{% else %}{{ "--選択--" }}{% endif %}
-                </option>
-                {% for vendor in send_dict["vendor_list"] %}
-                    <option value={{ vendor["コード"] }}>{{ vendor["名称"] }}</option>
-                {% endfor %}
+            <select id="select_vendor" name="select_vendor">
             </select>
         </p>
         <p>
             <label>人材</label>
-            <select name="resource" class="select3">
-                <option value="">
-                    {% if "resource_name" in send_dict %}{{ send_dict["resource_name"] }}{% else %}{{ "--選択--" }}{% endif %}
-                </option>
-                {% for resource in send_dict["resource_list"] %}
-                    <option value={{ resource["コード"] }}>{{ resource["人材情報"] }}</option>
-                {% endfor %}
+            <select id="select_resource" name="select_resource">
             </select>
-            <!-- <input type="text" name="keyword" size="5" id="keyword"
-            value={% if "keyword" in send_dict %}{{ send_dict["keyword"] }}{% endif %}> -->
+            <input type="text" name="keyword_name" id="keyword_name">
         </p>
         <p>
-            <label>作業時間</label>            
-            <input type="text" name="working_hours" size="5"
-            value={% if "working_hours" in send_dict %}{{ send_dict["working_hours"] }}{% endif %}>
+            <label>作業時間</label>
+            <input type="text" name="working_hours" id="working_hours">
         </p>
         <p>
-            <label>その他</label>            
-            <input type="text" name="others" size="10"
-            value={% if "others" in send_dict %}{{ send_dict["others"] }}{% endif %}>
+            <label>その他</label>
+            <input type="text" name="others">
         </p>
         <p>
-            <label>備考</label>            
-            <textarea name="remarks" rows="3" cols="20"></textarea>
+            <label>備考</label>
+            <textarea name="remarks"></textarea>
         </p>
-        <button type="submit" name="button" value="entry">登録</button>
+        <button type="button" id="button">送信</button>
     </form>
-    <p></p>
+
     <table class="design04">
         <thead>
             <tr>
@@ -74,18 +64,21 @@
             </tr>
         </thead>
         <tbody>
-            {% for hist in send_dict["input_history"] %}
-                <tr>
-                    <td>{{ hist["部門"] }}</td>
-                    <td>{{ hist["会社名"] }}</td>
-                    <td>{{ hist["氏名"] }}</td>
-                    <td>{{ hist["作業時間"] }}</td>
-                    <td>{{ hist["その他"] }}</td>
-                    <td>{{ hist["備考"] }}</td>
-                </tr>
-            {% endfor %}
+            {% if inputHist %}
+                {% for hist in inputHist %}
+                    <tr>
+                        <td>{{ hist["部門"] }}</td>
+                        <td>{{ hist["会社名"] }}</td>
+                        <td>{{ hist["氏名"] }}</td>
+                        <td>{{ hist["作業時間"] }}</td>
+                        <td>{{ hist["その他"] }}</td>
+                        <td>{{ hist["備考"] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
-    <script src="motion.js"></script>
 
-{% endblock %}
+    <script src="./static/main.js"></script>
+</body>
+</html>
