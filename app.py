@@ -65,7 +65,7 @@ def index():
 
 @app.route("/get_vendors", methods=["POST"])
 def get_vendors():
-    keyword = request.form.get("keyword")
+    keyword = request.form.get("departmentCode")
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(f"SELECT コード, 名称 FROM MVendor WHERE 部門 = '{keyword}';")

@@ -7,77 +7,50 @@
     <link rel="stylesheet" href="../static/style.css" type="text/css">
 </head>
 <body>
-        <header>
-            <h2>人材派遣費単価登録</h2>
-        </header>
+    <header>
+        <h2>人材派遣費単価登録</h2>
+    </header>
 
-		<form action="/regist" method="post" autocomplete="off" name="form01">
-        <p>
-            <label>請求年月</label>
-            <input type="text" name="year" class="input_s">年
-            <input type="text" name="month" class="input_s">月
-        </p>
-        <p>
-            <label>部門</label>
-            <select id="select_dept" name="select_dept">
-                <option value="">--選択--</option>
-                {% for department in departmentList %}
-                    <option value="{{ department["コード"] }}">{{ department["名称"] }}</option>
-                {% endfor %}
-            </select>
-        </p>
-        <p>
-            <label>業者</label>
-            <select id="select_vendor" name="select_vendor">
-            </select>
-        </p>
-        <p>
-            <label>人材</label>
-            <select id="select_resource" name="select_resource">
-            </select>
-            <input type="text" name="keyword_name" id="keyword_name">
-        </p>
-        <p>
-            <label>作業時間</label>
-            <input type="text" name="working_hours" id="working_hours">
-        </p>
-        <p>
-            <label>その他</label>
-            <input type="text" name="others">
-        </p>
-        <p>
-            <label>備考</label>
-            <textarea name="remarks"></textarea>
-        </p>
-        <button type="button" id="button">送信</button>
-    </form>
+    <p>
+        <label>請求年月</label>
+        <input type="text" name="year" id="year" class="input_s">年
+        <input type="text" name="month" id="month" class="input_s">月
+    </p>
+    <p>
+        <label>部門</label>
+        <select id="select_dept" name="select_dept">
+            <option value="">--選択--</option>
+            {% for department in departmentList %}
+                <option value="{{ department["コード"] }}">{{ department["名称"] }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label>業者</label>
+        <select id="select_vendor" name="select_vendor">
+        </select>
+    </p>
+    <p>
+        <label>人材</label>
+        <select id="select_resource" name="select_resource">
+        </select>
+        <input type="text" name="keyword_name" id="keyword_name">
+    </p>
+    <p>
+        <label>作業時間</label>
+        <input type="text" name="working_hours" id="working_hours">
+    </p>
+    <p>
+        <label>その他</label>
+        <input type="text" name="others" id="others">
+    </p>
+    <p>
+        <label>備考</label>
+        <textarea name="remarks" id="remarks"></textarea>
+    </p>
+    <button type="button" id="button">送信</button>
 
-    <table class="design04">
-        <thead>
-            <tr>
-                <th>部門</th>
-                <th>会社名</th>
-                <th>氏名</th>
-                <th>作業時間</th>
-                <th>その他</th>
-                <th>備考</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if inputHist %}
-                {% for hist in inputHist %}
-                    <tr>
-                        <td>{{ hist["部門"] }}</td>
-                        <td>{{ hist["会社名"] }}</td>
-                        <td>{{ hist["氏名"] }}</td>
-                        <td>{{ hist["作業時間"] }}</td>
-                        <td>{{ hist["その他"] }}</td>
-                        <td>{{ hist["備考"] }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+    <iframe id="frametarget" src="frametarget.html" width="700" height="300"></iframe>
 
     <script src="./static/main.js"></script>
 </body>

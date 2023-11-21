@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css" type="text/css">
+    <title>IFRAME</title>
+</head>
+<body>
+    <h4>テーブルフレーム</h4>
+    <table class="design04">
+        <thead>
+            <tr>
+                <th>部門</th>
+                <th>会社名</th>
+                <th>氏名</th>
+                <th>作業時間</th>
+                <th>その他</th>
+                <th>備考</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if inputHist %}
+                {% for hist in inputHist %}
+                    <tr>
+                        <td>{{ hist["部門"] }}</td>
+                        <td>{{ hist["会社名"] }}</td>
+                        <td>{{ hist["氏名"] }}</td>
+                        <td>{{ hist["作業時間"] }}</td>
+                        <td>{{ hist["その他"] }}</td>
+                        <td>{{ hist["備考"] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

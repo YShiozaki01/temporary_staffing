@@ -35,8 +35,35 @@
     const select_dept = document.querySelector("#select_dept");
     const select_vendor = document.querySelector("#select_vendor");
     select_dept.addEventListener("change", () => {
-            const keyword = select_dept.value;
-            get_menu(keyword, select_vendor, "/get_vendors");
+        fetch("/get_vendors", {
+            method: "POST",
+            body: new URLSearchParams({
+                departmentCode: document.querySelector("#select_dept").value,
+            })
+        }).then((result) => {
+            return result.json();
+        }).then((json) => {
+            const select = document.querySelector("#select_vendor")
+            // 前回のオプション要素をクリア
+            let len = select.length;
+            for (let i = 0; i < len; i++) {
+                select.remove(0);
+            }
+            // セレクトボックスのオプション要素を作成する
+            const optionData = JSON.parse(JSON.stringify(json));
+            const option = document.createElement("option");
+            // 選択先頭
+            option.text = "--選択--";
+            option.value = "";
+            select.append(option);
+            for (let key in optionData) {
+                const option = document.createElement("option");
+                option.text = optionData[key];
+                option.value = key;
+                select.append(option);
+
+            }
+        })
     });
 
     // 業者が選択されたら、人材のメニューデータを取得
@@ -77,8 +104,26 @@
 
     // フォーム送信
     document.querySelector("#button").addEventListener("click", () => {
-        document.form01.submit();
-    })
+        // document.form01.submit();
+        fetch("/regist", {
+            method: "POST",
+            body: new URLSearchParams({
+                year: document.querySelector("#year").value,
+                month: document.querySelector("#month").value,
+                select_dept: document.querySelector("#select_dept").value,
+                select_vendor: document.querySelector("#select_vendor").value,
+                select_resource: document.querySelector("#select_resource").value,
+                working_hours: document.querySelector("#working_hours").value,
+                others: document.querySelector("#others").value,
+                remarks: document.querySelector("#remarks").value,
+            })
+        })
+        document.querySelector("#select_resource").value = "";
+        document.querySelector("#working_hours").value = "";
+        document.querySelector("#others").value = "";
+        document.querySelector("#remarks").value = "";
 
+        document.form_tbl1.submit();
+    })
 
 }
