@@ -18,14 +18,15 @@ def get_db_connection():
 # 入力済みテーブル表示用のデータを生成
 def get_history(year, month):
     sql = f"""
-        SELECT b.名称 as 部門, c.名称 as 会社名, d.名称 as 氏名,
+        SELECT b.名称 as 部門, c.名称 as 会社名,
+        (d.名称 || ' 【' || d.勤務帯 || ' ' || d.業務内容 || ' ' || d.基本単価 || '】') as 氏名,
         a.作業時間, a.その他, a.備考
         FROM TTemporary_staffing as a
         LEFT JOIN MDepartment as b on a.部門 = b.コード
         LEFT JOIN MVendor as c on a.会社 = c.コード
         LEFT JOIN MHuman_resources as d on a.人材 = d.コード
         WHERE a.請求年 = {year} AND a.請求月 = {month}
-        ORDER by a.ID DESC;
+        ORDER by a._ROWID_ DESC;
     """
     conn = get_db_connection()
     cur = conn.cursor()
@@ -36,11 +37,14 @@ def get_history(year, month):
 
 # 入力済みのデータかチェック
 def check_exist(year, month, code):
+    sql = f"""
+        SELECT * FROM TTemporary_staffing
+        WHERE 請求年 = {year} AND 請求月 = {month}
+        AND 人材 = {code}
+    """
     conn = sqlite3.connect("./database/database.db")
     cur = conn.cursor()
-    cur.execute(f"""SELECT * FROM TTemporary_staffing
-                WHERE 請求年 = {year} AND 請求月 = {month}
-                AND 人材 = {code}""")
+    cur.execute(sql)
     if len(cur.fetchall()) > 0:
         result = True
     else:
@@ -80,7 +84,7 @@ def get_resources():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(f"""SELECT コード, 名称 || ' 【' || 勤務帯 || ' ' || 業務内容 || ' ' || 基本単価 || '】' as 人材
-                FROM MHuman_resources WHERE 業者コード = {keyword};""")
+                FROM MHuman_resources WHERE 業者コード = {keyword} AND 削除 is NULL;""")
     result = cur.fetchall()
     vendors = dict(result)
     return jsonify(vendors)
@@ -92,7 +96,8 @@ def get_resources_name():
     dictKw = json.loads(strKeywords)
     sql = f"""
         SELECT コード, 名称 || ' 【' || 勤務帯 || ' ' || 業務内容 || ' ' || 基本単価 || '】' as 人材
-        FROM MHuman_resources WHERE 業者コード = {int(dictKw["key1"])} AND 名称 like '%{dictKw["key2"]}%';
+        FROM MHuman_resources WHERE 業者コード = {int(dictKw["key1"])} AND 名称 like '%{dictKw["key2"]}%'
+        AND 削除 is NULL;
         """
     conn = get_db_connection()
     cur = conn.cursor()
@@ -132,12 +137,20 @@ def regist():
                 その他 = '{others if others else ''}', 備考 = '{remarks if remarks else ''}'
                 WHERE 請求年 = {closingYear} AND 請求月 = {closingMonth} AND 人材 = {selectHumanResources};
             """
-            print(sql)
             cur.execute(sql)
             conn.commit()
         yearMonth["year"] = closingYear
         yearMonth["month"] = closingMonth
-        return redirect(url_for("index"))
+        # テーブル用のデータを生成
+        result = get_history(closingYear, closingMonth)
+        array = []
+        header = ["部門", "会社名", "氏名", "作業時間", "その他", "備考"]
+        array.append(header)
+        for element in result:
+            array.append(list(element))
+        dict = {}
+        dict["history"] = array
+        return jsonify(dict)
 
 
 if __name__ == "__main__":

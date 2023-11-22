@@ -104,7 +104,6 @@
 
     // フォーム送信
     document.querySelector("#button").addEventListener("click", () => {
-        // document.form01.submit();
         fetch("/regist", {
             method: "POST",
             body: new URLSearchParams({
@@ -117,13 +116,54 @@
                 others: document.querySelector("#others").value,
                 remarks: document.querySelector("#remarks").value,
             })
+        }).then((result) => {
+            return result.json();
+        }).then((json) => {
+            target = document.querySelector("#table_area")
+            generate_table(target, json.history)
         })
         document.querySelector("#select_resource").value = "";
+        document.querySelector("#keyword_name").value = "";
         document.querySelector("#working_hours").value = "";
         document.querySelector("#others").value = "";
         document.querySelector("#remarks").value = "";
-
-        document.form_tbl1.submit();
+        const keyword = select_vendor.value;
+        get_menu(keyword, select_resource, "/get_resources");
     })
 
+    // 入力履歴のテーブルを作成
+    function generate_table(_table, _data) {
+        clear_table(_table)
+        let firstTime = true;
+        const _thead = document.createElement("thead");
+        const _tbody = document.createElement("tbody");
+        _data.forEach((_row) => {
+            const _table_row = document.createElement("tr");
+            if (firstTime) {
+                _row.forEach((_column) => {
+                    const _cell = document.createElement("th");
+                    _cell.innerHTML = _column
+                    _table_row.appendChild(_cell);
+                })
+                firstTime = false;
+                _thead.append(_table_row);
+            } else {
+                _row.forEach((_column) => {
+                    const _cell = document.createElement("td");
+                    _cell.innerHTML = _column
+                    _table_row.appendChild(_cell);
+                })
+                _tbody.append(_table_row);
+            }
+        })
+        _table.append(_thead);
+        _table.append(_tbody);
+    }
+
+    // 前回取得したテーブルのデータを削除
+    function clear_table(_table) {
+        while (_table.rows.length !== 0) {
+            _table.deleteRow(_table.rows.length - 1);
+        }
+    }
 }
